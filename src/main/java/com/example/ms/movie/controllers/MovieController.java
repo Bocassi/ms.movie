@@ -1,0 +1,94 @@
+package com.example.ms.movie.controllers;
+
+import com.example.ms.movie.controllers.dtos.requests.CreateMovieRequest;
+import com.example.ms.movie.controllers.dtos.requests.UpdateMovieRequest;
+import com.example.ms.movie.entities.Movie;
+import com.example.ms.movie.repositories.MovieRepository;
+import com.example.ms.movie.services.MovieService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping (value = "/movie")
+@Tag(name = "Movies", description = "Endpoints for movie operations")
+public class MovieController {
+
+    private MovieService movieService;
+
+    public MovieController(MovieService movieService) {this.movieService = movieService;}
+
+    @PostMapping
+    @Operation(summary = "Creates a new movie")
+    @ApiResponse(responseCode = "201", description = "Movie created successfully")
+    public ResponseEntity<Movie> createMovie(@Valid @RequestBody
+                                                 @Parameter(description = "Class used to create a new movie", required = true) CreateMovieRequest createMovieRequest) {
+
+        return new ResponseEntity<>(movieService.createMovie(createMovieRequest), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    @Operation(summary = "Get a list of all the movies")
+    @ApiResponse(responseCode = "200", description = "List retrieved successfully")
+    public ResponseEntity<List<Movie>> getAllMovies() {
+
+        return new ResponseEntity<>(movieService.getAllMovies(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    @Operation(summary = "Get a movie by ID")
+    @ApiResponse(responseCode = "200", description = "Movie found")
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    public ResponseEntity<Movie> getMovieById(@PathVariable @Positive(message = "'id' must be a positive value")
+                                                  @Parameter(description = "Movie ID", required = true) Long id) {
+
+        return new ResponseEntity<>(movieService.getMovieById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/rent")
+    @Operation(summary = "Rent a movie. Changes it's availability status to 'false' and updates its client number")
+    @ApiResponse(responseCode = "200", description = "Movie found")
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    public ResponseEntity<String> rentMovie(@PathVariable @Parameter(description = "Movie ID", required = true) Long id,
+                                            @RequestParam @Parameter(description = "Client Number of the renter", required = true) String clientNumber) {
+
+        return new ResponseEntity<>(movieService.rentMovie(id, clientNumber), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/return")
+    @Operation(summary = "Return a movie. Changes it's availability status to 'true' and removes its client number")
+    @ApiResponse(responseCode = "200", description = "Movie found")
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    public ResponseEntity<String> returnMovie(@PathVariable @Parameter(description = "Movie ID", required = true) Long id) {
+
+        return new ResponseEntity<>(movieService.returnMovie(id), HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/{id}")
+    @Operation(summary = "Updates an attribute of a movie")
+    @ApiResponse(responseCode = "200", description = "Movie found")
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    public ResponseEntity<Movie> updateMovie(@PathVariable @Positive(message = "'id' must be a positive value") @Parameter(description = "Movie ID", required = true) Long id,
+                                             @Valid @RequestBody @Parameter(description = "Class used to update an existing movie", required = true) UpdateMovieRequest updateMovieRequest) {
+
+        return new ResponseEntity<>(movieService.updateMovie(id, updateMovieRequest), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @Operation(summary = "Deletes a movie")
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    public void deleteMovie(@PathVariable @Positive(message = "'id' must be a positive value")
+                                @Parameter(description = "Movie ID", required = true) Long id) {
+
+        movieService.deleteMovie(id);
+    }
+}
