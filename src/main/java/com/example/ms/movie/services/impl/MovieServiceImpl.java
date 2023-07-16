@@ -2,9 +2,12 @@ package com.example.ms.movie.services.impl;
 
 import com.example.ms.movie.controllers.dtos.requests.CreateMovieRequest;
 import com.example.ms.movie.controllers.dtos.requests.UpdateMovieRequest;
+import com.example.ms.movie.controllers.dtos.responses.GetClientByMovieIdResponse;
 import com.example.ms.movie.entities.Movie;
 import com.example.ms.movie.repositories.MovieRepository;
+import com.example.ms.movie.services.ClientFeignClient;
 import com.example.ms.movie.services.MovieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,9 +18,11 @@ import java.util.Optional;
 @Service
 public class MovieServiceImpl implements MovieService {
 
+    @Autowired
     private MovieRepository movieRepository;
 
-    public MovieServiceImpl(MovieRepository movieRepository) {this.movieRepository = movieRepository;}
+    @Autowired
+    private ClientFeignClient clientFeignClient;
 
     @Override
     public Movie createMovie(CreateMovieRequest createMovieRequest) {
@@ -47,7 +52,6 @@ public class MovieServiceImpl implements MovieService {
 
             return movie.get();
         }   else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
-
     }
 
     @Override
@@ -119,5 +123,32 @@ public class MovieServiceImpl implements MovieService {
                 return "The movie is not currently rented.";
             }
         } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found");
+    }
+
+    @Override
+    public List<Movie> getMoviesByClientNumber(String clientNumber) {
+
+        List<Movie> movieList = movieRepository.findByClientNumber(clientNumber);
+
+        if(movieList.size() > 0) {
+
+            return movieList;
+        }   else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This client doesn't have any rented movies");
+    }
+
+    @Override
+    public GetClientByMovieIdResponse getClientByMovieId(Long movieId) {
+
+        Optional<Movie> optionalMovie = movieRepository.findById(movieId);
+
+        if (optionalMovie.isPresent()) {
+
+            Movie movie = optionalMovie.get();
+
+            if (!movie.getMovieAvailable()) {
+
+                return clientFeignClient.getClientByClientNumber(movie.getClientNumber());
+            } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The movie is not currently rented");
+        } else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The provided movie ID doesn't exist");
     }
 }

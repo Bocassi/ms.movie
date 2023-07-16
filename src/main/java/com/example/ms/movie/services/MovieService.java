@@ -2,6 +2,7 @@ package com.example.ms.movie.services;
 
 import com.example.ms.movie.controllers.dtos.requests.CreateMovieRequest;
 import com.example.ms.movie.controllers.dtos.requests.UpdateMovieRequest;
+import com.example.ms.movie.controllers.dtos.responses.GetClientByMovieIdResponse;
 import com.example.ms.movie.entities.Movie;
 
 import org.springframework.stereotype.Service;
@@ -25,4 +26,7 @@ public interface MovieService {
 
     String returnMovie(Long id);
 
+    List<Movie> getMoviesByClientNumber(String clientNumber);
+
+    GetClientByMovieIdResponse getClientByMovieId(Long movieId);
 }

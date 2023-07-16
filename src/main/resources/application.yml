@@ -2,11 +2,19 @@
 server:
   port: 8082
 
+client:
+  service:
+    url: http://localhost:8081
+
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/movie
     username: postgres
     password: nonochais
+
+  application:
+    name: ms.movie
 
   mvc:
     pathmatch:
