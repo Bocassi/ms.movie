@@ -4,6 +4,7 @@ import com.example.ms.movie.controllers.dtos.requests.CreateMovieRequest;
 import com.example.ms.movie.controllers.dtos.requests.UpdateMovieRequest;
 import com.example.ms.movie.entities.Movie;
 import com.example.ms.movie.repositories.MovieRepository;
+import com.example.ms.movie.services.ClientFeignClient;
 import com.example.ms.movie.services.MovieService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,11 +26,13 @@ class MovieServiceImplTest {
 
     private MovieService movieService;
 
+    private ClientFeignClient clientFeignClient;
+
     @BeforeEach
     void setUp() {
 
         MockitoAnnotations.openMocks(this);
-        movieService = new MovieServiceImpl(movieRepository);
+        movieService = new MovieServiceImpl(movieRepository, clientFeignClient);
     }
 
     @Test

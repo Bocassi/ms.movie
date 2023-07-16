@@ -62,6 +62,21 @@
             <version>1.7.0</version>
         </dependency>
 
+        <!-- Dependencias de Spring Cloud Feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>3.1.7</version>
+
+        </dependency>
+
+        <!-- Dependencias de Spring Cloud -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter</artifactId>
+            <version>3.1.7</version>
+        </dependency>
+
     </dependencies>
 
     <build>

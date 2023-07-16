@@ -2,6 +2,7 @@ package com.example.ms.movie.controllers;
 
 import com.example.ms.movie.controllers.dtos.requests.CreateMovieRequest;
 import com.example.ms.movie.controllers.dtos.requests.UpdateMovieRequest;
+import com.example.ms.movie.controllers.dtos.responses.GetClientByMovieIdResponse;
 import com.example.ms.movie.entities.Movie;
 import com.example.ms.movie.repositories.MovieRepository;
 import com.example.ms.movie.services.MovieService;
@@ -11,15 +12,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping (value = "/movie")
+@Validated
 @Tag(name = "Movies", description = "Endpoints for movie operations")
 public class MovieController {
 
@@ -90,5 +92,17 @@ public class MovieController {
                                 @Parameter(description = "Movie ID", required = true) Long id) {
 
         movieService.deleteMovie(id);
+    }
+
+    @GetMapping(value = "/movies")
+    public ResponseEntity<List<Movie>> getMoviesByClientNumber(@RequestParam @Parameter(description = "Client Number of the renter", required = true) String clientNumber) {
+
+        return new ResponseEntity<>(movieService.getMoviesByClientNumber(clientNumber), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/client/{movieId}")
+    public ResponseEntity<GetClientByMovieIdResponse> getClientByMovieId(@PathVariable Long movieId) {
+
+        return new ResponseEntity<>(movieService.getClientByMovieId(movieId), HttpStatus.OK);
     }
 }
