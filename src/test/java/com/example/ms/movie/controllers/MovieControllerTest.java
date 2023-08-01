@@ -71,33 +71,6 @@ class MovieControllerTest {
         assert result.getBody().equals(movie);
     }
 
-    @Test
-    void rentMovie() {
-
-        String clientNumber = "test01";
-        String response = "The movie was rented successfully.";
-
-        Mockito.when(movieService.rentMovie(1L, clientNumber)).thenReturn(response);
-        ResponseEntity<String> result = movieController.rentMovie(1L, clientNumber);
-
-        Mockito.verify(movieService).rentMovie(1L, clientNumber);
-        assert result.getStatusCode() == HttpStatus.OK;
-        assert result.getBody().equals(response);
-    }
-
-    @Test
-    void returnMovie() {
-
-        String clientNumber = "test01";
-        String response = "The movie was returned successfully.";
-
-        Mockito.when(movieService.returnMovie(1L)).thenReturn(response);
-        ResponseEntity<String> result = movieController.returnMovie(1L);
-
-        Mockito.verify(movieService).returnMovie(1L);
-        assert result.getStatusCode() == HttpStatus.OK;
-        assert result.getBody().equals(response);
-    }
 
     @Test
     void updateMovie() {

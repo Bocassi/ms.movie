@@ -4,7 +4,6 @@ import com.example.ms.movie.controllers.dtos.requests.CreateMovieRequest;
 import com.example.ms.movie.controllers.dtos.requests.UpdateMovieRequest;
 import com.example.ms.movie.controllers.dtos.responses.GetClientByMovieIdResponse;
 import com.example.ms.movie.entities.Movie;
-import com.example.ms.movie.repositories.MovieRepository;
 import com.example.ms.movie.services.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,24 +55,6 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getMovieById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/rent")
-    @Operation(summary = "Rent a movie. Changes it's availability status to 'false' and updates its client number")
-    @ApiResponse(responseCode = "200", description = "Movie found")
-    @ApiResponse(responseCode = "404", description = "Movie not found")
-    public ResponseEntity<String> rentMovie(@PathVariable @Parameter(description = "Movie ID", required = true) Long id,
-                                            @RequestParam @Parameter(description = "Client Number of the renter", required = true) String clientNumber) {
-
-        return new ResponseEntity<>(movieService.rentMovie(id, clientNumber), HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}/return")
-    @Operation(summary = "Return a movie. Changes it's availability status to 'true' and removes its client number")
-    @ApiResponse(responseCode = "200", description = "Movie found")
-    @ApiResponse(responseCode = "404", description = "Movie not found")
-    public ResponseEntity<String> returnMovie(@PathVariable @Parameter(description = "Movie ID", required = true) Long id) {
-
-        return new ResponseEntity<>(movieService.returnMovie(id), HttpStatus.OK);
-    }
 
     @PatchMapping(value = "/{id}")
     @Operation(summary = "Updates an attribute of a movie")

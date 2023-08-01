@@ -1,6 +1,7 @@
 package com.example.ms.movie.services;
 
 import com.example.ms.movie.controllers.dtos.requests.CreateMovieRequest;
+import com.example.ms.movie.controllers.dtos.requests.RentAndReturnMovieRequest;
 import com.example.ms.movie.controllers.dtos.requests.UpdateMovieRequest;
 import com.example.ms.movie.controllers.dtos.responses.GetClientByMovieIdResponse;
 import com.example.ms.movie.entities.Movie;
@@ -22,9 +23,9 @@ public interface MovieService {
 
     Movie updateMovie(Long id, UpdateMovieRequest updateMovieRequest);
 
-    String rentMovie(Long id, String clientNumber);
+    void rentMovie(RentAndReturnMovieRequest rentAndReturnMovieRequest);
 
-    String returnMovie(Long id);
+    void returnMovie(RentAndReturnMovieRequest rentAndReturnMovieRequest);
 
     List<Movie> getMoviesByClientNumber(String clientNumber);
 

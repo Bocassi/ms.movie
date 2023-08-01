@@ -32,7 +32,7 @@ class MovieServiceImplTest {
     void setUp() {
 
         MockitoAnnotations.openMocks(this);
-        movieService = new MovieServiceImpl(movieRepository, clientFeignClient);
+        movieService = new MovieServiceImpl(movieRepository);
     }
 
     @Test
@@ -93,57 +93,6 @@ class MovieServiceImplTest {
     }
 
     @Test
-    void rentMovie() {
-
-        Movie movie = Movie.builder().movieId(1L).movieName("Movie Test").movieAvailable(true).clientNumber(null).build();
-
-        Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.ofNullable(movie));
-        movieService.rentMovie(1L, "test01");
-
-        Assertions.assertFalse(movie.getMovieAvailable());
-        Mockito.verify(movieRepository,Mockito.times(1)).save(movie);
-    }
-
-    @Test
-    void rentMovieIfNotAvailable() {
-
-        Movie movie = Movie.builder().movieId(1L).movieName("Movie Test").movieAvailable(false).clientNumber("test02").build();
-
-        Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.ofNullable(movie));
-        String replyAnswer = "The movie is already rented.";
-        String result = movieService.rentMovie(1L, "test01");
-
-        Assertions.assertEquals(replyAnswer, result);
-        Mockito.verify(movieRepository,Mockito.times(0)).save(movie);
-    }
-
-    @Test
-    void returnMovie() {
-
-        Movie movie = Movie.builder().movieId(1L).movieName("Movie Test").movieAvailable(false).clientNumber("test02").build();
-
-        Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.ofNullable(movie));
-        movieService.returnMovie(1L);
-
-        Assertions.assertTrue(movie.getMovieAvailable());
-        Mockito.verify(movieRepository,Mockito.times(1)).save(movie);
-    }
-
-    @Test
-    void returnMovieIfNotAvailable() {
-
-        Movie movie = Movie.builder().movieId(1L).movieName("Movie Test").movieAvailable(true).clientNumber(null).build();
-
-        Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.ofNullable(movie));
-        String replyAnswer = "The movie is not currently rented.";
-        String result = movieService.returnMovie(1L);
-
-        Assertions.assertEquals(replyAnswer, result);
-        Mockito.verify(movieRepository,Mockito.times(0)).save(movie);
-    }
-
-
-    @Test
     void getMovieNotFoundException() {
 
         Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.empty());
@@ -151,23 +100,7 @@ class MovieServiceImplTest {
         Assertions.assertThrows(ResponseStatusException.class,()->movieService.getMovieById(1L));
     }
 
-    @Test
-    void rentMovieNotFoundException() {
-
-        Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.empty());
-
-        Assertions.assertThrows(ResponseStatusException.class,()->movieService.rentMovie(1L, "test01"));
-    }
-
-    @Test
-    void returnMovieNotFoundException() {
-
-        Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.empty());
-
-        Assertions.assertThrows(ResponseStatusException.class,()->movieService.returnMovie(1L));
-    }
-
-    @Test
+      @Test
     void deleteMovieNotFoundException() {
 
         Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.empty());

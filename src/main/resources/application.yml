@@ -12,7 +12,17 @@ spring:
     url: jdbc:postgresql://localhost:5432/movie
     username: postgres
     password: nonochais
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: source_mail@gmail.com   #change for the source email address
+    password: password                #change for the account application password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   application:
     name: ms.movie
 
@@ -28,3 +38,17 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    listener:
+      ack-mode: RECORD
+    topic-rent: rent-movie
+    group-rent: rent-consumer
+    topic-return: return-movie
+    group-return: return-consumer
