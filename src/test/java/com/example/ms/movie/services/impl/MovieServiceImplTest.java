@@ -1,23 +1,21 @@
 package com.example.ms.movie.services.impl;
 
+import com.example.ms.movie.controllers.MovieController;
 import com.example.ms.movie.controllers.dtos.requests.CreateMovieRequest;
 import com.example.ms.movie.controllers.dtos.requests.UpdateMovieRequest;
 import com.example.ms.movie.entities.Movie;
 import com.example.ms.movie.repositories.MovieRepository;
-import com.example.ms.movie.services.ClientFeignClient;
 import com.example.ms.movie.services.MovieService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MovieServiceImplTest {
 
@@ -25,8 +23,6 @@ class MovieServiceImplTest {
     private MovieRepository movieRepository;
 
     private MovieService movieService;
-
-    private ClientFeignClient clientFeignClient;
 
     @BeforeEach
     void setUp() {

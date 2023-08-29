@@ -20,8 +20,11 @@ import java.util.Optional;
 @Service
 public class MovieServiceImpl implements MovieService {
 
-    @Autowired
     private MovieRepository movieRepository;
+
+    public MovieServiceImpl(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+    }
 
     @Autowired
     private EmailService emailService;
